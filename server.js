@@ -2,35 +2,44 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 
+var Pool=require('pg').Pool;
+
+var config= {
+    user: 'anshuspanda',
+    database: 'anshuspanda',
+    host: 'db.imad.hasura-app.io',
+    port: '5432',
+    password: process.env.DB_PASSWORD
+}
 var app = express();
 app.use(morgan('combined'));
 
-var articles = {
-    "article-one": {
-        title: "Article One",
-        name: "Article One | Anshu S Panda",
-        date: "01/02/2018",
-        content: `
-        <p>This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.</p>
-        `
-    },
-    "article-two": {
-        title: "Article Two",
-        name: "Article Two | Anshu S Panda",
-        date: "07/02/2018",
-        content: `
-        <p>This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.</p>
-        `
-    },
-    "article-three": {
-        title: "Article Three",
-        name: "Article Three | Anshu S Panda",
-        date: "27/02/2018",
-        content: `
-        <p>This is the place where the article two is shown.</p>
-        `
-    }
-};
+// var articles = {
+//     "article-one": {
+//         title: "Article One",
+//         name: "Article One | Anshu S Panda",
+//         date: "01/02/2018",
+//         content: `
+//         <p>This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.</p>
+//         `
+//     },
+//     "article-two": {
+//         title: "Article Two",
+//         name: "Article Two | Anshu S Panda",
+//         date: "07/02/2018",
+//         content: `
+//         <p>This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.</p>
+//         `
+//     },
+//     "article-three": {
+//         title: "Article Three",
+//         name: "Article Three | Anshu S Panda",
+//         date: "27/02/2018",
+//         content: `
+//         <p>This is the place where the article two is shown.</p>
+//         `
+//     }
+// };
 
 function createTemplate(data){
     var title=data.title;
@@ -71,11 +80,36 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
-app.get('/:articleName',function(req, res){
+app.get('/articles/:articleName',function(req, res){
     var articleName=req.params.articleName;
-    res.send(createTemplate(articles[articleName]));
+    
+    pool.query("SELECT * FROM article WHERE title='" + req.params.aritcleName + "'", function(err, res) {
+        if(err) {
+            res.status(500).send(err.toString());
+        }
+        else {
+            if(res.rows===0) {
+                res.status(404).send("Article Not Found");
+            } else {
+                res.send(createTemplate(articles[articleName]));
+            }
+        }
+        
+    })
+
 });
 
+var pool=new Pool(config);
+app.get('/test-db',function(req,res) {
+    pool.query("SELECT * FROM test", function(err,result) {
+       if(err) {
+           res.status(500).send(err.toString());
+       } 
+       else {
+           res.send(JSON.stringify(result));
+       }
+    });
+});
 
 app.get('/ui/style.css', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'style.css'));
