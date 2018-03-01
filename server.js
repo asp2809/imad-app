@@ -14,32 +14,32 @@ var config= {
 var app = express();
 app.use(morgan('combined'));
 
-// var articles = {
-//     "article-one": {
-//         title: "Article One",
-//         name: "Article One | Anshu S Panda",
-//         date: "01/02/2018",
-//         content: `
-//         <p>This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.</p>
-//         `
-//     },
-//     "article-two": {
-//         title: "Article Two",
-//         name: "Article Two | Anshu S Panda",
-//         date: "07/02/2018",
-//         content: `
-//         <p>This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.</p>
-//         `
-//     },
-//     "article-three": {
-//         title: "Article Three",
-//         name: "Article Three | Anshu S Panda",
-//         date: "27/02/2018",
-//         content: `
-//         <p>This is the place where the article two is shown.</p>
-//         `
-//     }
-// };
+var articles = {
+    "article-one": {
+        title: "Article One",
+        name: "Article One | Anshu S Panda",
+        date: "01/02/2018",
+        content: `
+        <p>This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.This is the place where the article one is shown.</p>
+        `
+    },
+    "article-two": {
+        title: "Article Two",
+        name: "Article Two | Anshu S Panda",
+        date: "07/02/2018",
+        content: `
+        <p>This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.This is the place where the article two is shown.</p>
+        `
+    },
+    "article-three": {
+        title: "Article Three",
+        name: "Article Three | Anshu S Panda",
+        date: "27/02/2018",
+        content: `
+        <p>This is the place where the article two is shown.</p>
+        `
+    }
+};
 
 function createTemplate(data){
     var title=data.title;
